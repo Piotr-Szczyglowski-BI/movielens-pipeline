@@ -9,7 +9,7 @@ renamed as (
     userId as user_id,
     movieId as movie_id,
     tag as tag,
-    to_timestamp(cast(timestamp as bigint)) as tag_timestamp
+    cast(timestamp as timestamp) as tag_timestamp
     from
     source
 )

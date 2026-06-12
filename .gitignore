@@ -3,3 +3,7 @@ data/
 *.pyc
 __pycache__/
 .kaggle/
+target/
+logs/
+*.duckdb
+dbt_packages/
