@@ -32,8 +32,9 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   movielens:
     # Config indicated by + and applies to all files under models/example/
-    example:
-      +materialized: table
     staging:
       # Config indicated by + and applies to all files under models/example/staging/
+      +materialized: table
+    gold:
+      # Config indicated by + and applies to all files under models/example/gold/
       +materialized: table
