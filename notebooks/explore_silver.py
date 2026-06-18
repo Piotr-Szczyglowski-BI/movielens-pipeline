@@ -20,4 +20,12 @@ print(connection.execute("SELECT * FROM movie_popularity LIMIT 5").df())
 print("\n=== user_activity (top 5 users) ===")
 print(connection.execute("SELECT * FROM user_activity LIMIT 5").df())
 
+# Top 5 rows ofr user_item_features table
+print("\n=== user_item_features (top 5 rows) ===")
+print(connection.execute("SELECT * FROM user_item_features LIMIT 5").df())
+
+# Count of records of user_item_features table
+print("\n== Count of records in user_item_Featues table ===")
+print(connection.execute("SELECT COUNT(*) FROM user_item_features").df())
+
 connection.close()

@@ -1,0 +1,64 @@
+version: 2
+
+models:
+  - name: stg_movie
+    description: "Staging model for movies - cleaned and renamed from raw source"
+    columns:
+      - name: movie_id
+        description: "Unique movie identifier"
+        tests:
+          - unique
+          - not_null
+
+      - name: title
+        description: "Movie Title"
+        tests:
+          - not_null
+      
+      - name: genres_raw
+        description: "Raw genres listed from the source"
+        tests:
+          - not_null
+      
+  - name: stg_rating
+    description: "Staging model for user ratings"
+    columns:
+      - name: user_id
+        description: "User identifier"
+        tests:
+          - not_null
+
+      - name: movie_id
+        description: "Movie identifier"
+        tests:
+          - not_null
+
+      - name: rating
+        description: "Rating value between 0.5 and 5.0"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]
+        
+  - name: stg_tag
+    description: "Staging model for user-generated tags"
+    columns:
+      - name: user_id
+        description: "User Identifier"
+        tests:
+          - not_null
+
+      - name: movie_id
+        description: "Movie Identifier"
+        tests:
+          - not_null
+      
+  - name: stg_link
+    description: "Staging model for external ID mappings (IMDb, TMDb)"
+    columns:
+      - name: movie_id
+        description: "Movie Identifier"
+        tests:
+          - unique
+          - not_null
+        
