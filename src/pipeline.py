@@ -12,8 +12,6 @@ log = logging.getLogger(__name__)
 @task(name="Bronze Ingestion", retries=2)
 def run_ingestion():
     "Read raw CSV files and save as parquet to bronze layer"
-
-
     log.info("Starting bronze ingestion...")
     run_all()
     log.info("Bronze ingestion completed")
@@ -25,27 +23,27 @@ def run_dbt_staging():
     log.info(f"Starting silver layer staging...")
     result = subprocess.run(
         ["dbt", "run", "--select", "staging.*"],
-        cwd = "movielens",
+        cwd="movielens",
         capture_output=True,
-        text = True
+        text=True
     )
     log.info(result.stdout)
     if result.returncode != 0:
         raise Exception(f"dbt staging failed:\n{result.stderr}")
     
-@task(name="Gold - dbt gold models", retries = 1)
+@task(name="Gold - dbt gold models", retries=1)
 def run_dbt_gold():
     "Run dbt gold models to build analytical layer"
     log.info("Starting Gold layer data processing")
     result = subprocess.run(
         ["dbt", "run", "--select", "gold.*"],
-        cwd = "movielens",
-        capture_output = True,
-        text = True
+        cwd="movielens",
+        capture_output=True,
+        text=True
     )
     log.info(result.stdout)
     if result.returncode != 0:
-        raise Exception(f"dbt staging failed:\n{result.stderr}")
+        raise Exception(f"dbt gold failed:\n{result.stderr}")
     
 @task(name="Data Quality Checks", retries=1)
 def run_dbt_tests():
@@ -64,9 +62,9 @@ def run_dbt_tests():
 @flow(name="Movielens - Pipeline")
 def movielens_pipeline(skip_ingestion: bool = False):
     """
-    End-to-End pipelne: Bronze -> Silver -> Gold -> Tests
+    End-to-End pipeline: Bronze -> Silver -> Gold -> Tests
 
-    Args: 
+    Args:
 
     Skip Ingestion: set True to skip Bronze ingestion (data already downloaded)
     """
@@ -77,7 +75,7 @@ def movielens_pipeline(skip_ingestion: bool = False):
     run_dbt_gold()
     run_dbt_tests()
 
-    log.info("Pipeline executed successfuly")
+    log.info("Pipeline executed successfully")
     
 
 if __name__ == "__main__":
