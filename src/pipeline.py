@@ -2,6 +2,7 @@ from prefect import flow, task
 import subprocess
 from pathlib import Path
 import logging
+from ingest import run_all
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 log = logging.getLogger(__name__)
@@ -11,22 +12,12 @@ log = logging.getLogger(__name__)
 @task(name="Bronze Ingestion", retries=2)
 def run_ingestion():
     "Read raw CSV files and save as parquet to bronze layer"
+
+
     log.info("Starting bronze ingestion...")
+    run_all()
+    log.info("Bronze ingestion completed")
 
-    import pandas as pd
-    from pathlib import Path
-
-    RAW = Path("data/raw")
-    BRONZE = Path("data/bronze")
-    BRONZE.mkdir(exist_ok=True)
-
-    for name in ["movie", "rating", "tag", "link"]:
-        src = RAW / f"{name}.csv"
-        dst = BRONZE/ f"{name}.parquet"
-        log.info(f"ingesting {src} -> {dst}")
-        df = pd.read_csv(src)
-        df.to_parquet(dst, index=False)
-        log.info(f"file {src} saved as parquet {len(df)} rows")
 
 @task(name="Silver - dbt staging", retries=1)
 def run_dbt_staging():
